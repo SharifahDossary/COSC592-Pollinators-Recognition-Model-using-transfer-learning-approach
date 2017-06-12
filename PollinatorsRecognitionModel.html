@@ -1,0 +1,1083 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>PollinatorsRecognitionModel</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-12"><meta name="DC.source" content="PollinatorsRecognitionModel.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">based on Image Category Classification Using Deep Learning example we developed our Pollinator Recognition Model.</a></li><li><a href="#2">Check System Requirements</a></li><li><a href="#3">upload Image Data</a></li><li><a href="#4">Load Images</a></li><li><a href="#8">upload Pre-trained Convolutional Neural Network (CNN)</a></li><li><a href="#9">fine-tune the last three layers for the new classification problem</a></li><li><a href="#10">modify the input layer we added the 'DataAugmentation' and set it to'randfliplr</a></li><li><a href="#11">Add dropout layer this layer is added to manage the overfitting of the algorithm</a></li><li><a href="#12">the fully connected layer to classify the six classes</a></li><li><a href="#13">adding a softmax layer and classification output layer</a></li><li><a href="#14">create the options of the transfer learning</a></li><li><a href="#15">Pre-process Images For CNN</a></li><li><a href="#16">Prepare Training and Test Image Sets</a></li><li><a href="#17">Preform transfer learning. trainingFeatures, trainingLabels must have same number of observation</a></li><li><a href="#18">save the trained network and this is the file  (pRModel.mat) that will be used in the GUI</a></li><li><a href="#19">This part shows the use of classification (classifiers) functions within the code</a></li><li><a href="#20">Train A Multiclass SVM Classifier Using CNN Features</a></li><li><a href="#21">Evaluate Classifier</a></li><li><a href="#22">to save miss-predicted lebles</a></li><li><a href="#23">both methods showed the same results</a></li><li><a href="#24">Try the Newly Trained Classifier on Test Images</a></li><li><a href="#28">Display image with the predicted classfication</a></li><li><a href="#29">visualize the matrix using</a></li><li><a href="#30">the pre-processing function</a></li></ul></div><h2 id="1">based on Image Category Classification Using Deep Learning example we developed our Pollinator Recognition Model.</h2><p>most of the example comments were left as it is.</p><pre class="codeinput"><span class="comment">%Clear Memory &amp; Command Window</span>
+clc;
+clear <span class="string">all</span>;
+close <span class="string">all</span>;
+</pre><h2 id="2">Check System Requirements</h2><p>the system running A CUDA-capable NVIDIA&#8482; GPU with compute capability 3.7</p><pre class="codeinput"><span class="comment">% Get GPU device information</span>
+deviceInfo = gpuDevice;
+
+<span class="comment">%Reset the GPU this step performed to free some spaces on the GPU;</span>
+<span class="comment">%it was used when an error message appeared 'not enough memory.'</span>
+gpuDevice(1);
+
+<span class="comment">% Check the GPU compute capability</span>
+computeCapability = str2double(deviceInfo.ComputeCapability);
+assert(computeCapability &gt; 3.0, <span class="keyword">...</span>
+    <span class="string">'This example requires a GPU device with compute capability 3.0 or higher.'</span>)
+</pre><h2 id="3">upload Image Data</h2><p>Store the output in a temporary folder</p><pre class="codeinput">outputFolder = fullfile({<span class="string">'/home/saldossa/Documents/MATLAB/PollinatorsRecognitionModel'</span>});
+</pre><h2 id="4">Load Images</h2><p>use six categories: 'Bees', 'Flies','Beetles''Moths', 'Wasps','Butterflies'</p><pre class="codeinput"><span class="comment">%The image category classifier will be trained to distinguish amongst</span>
+<span class="comment">%these categories.</span>
+
+rootFolder = fullfile(outputFolder, {<span class="string">'coarse-grained-227'</span>});
+categories = {<span class="string">'Bees'</span>,<span class="string">'Butterflies'</span>,<span class="string">'Beetles'</span>,<span class="string">'Flies'</span>,<span class="string">'Moths'</span>,<span class="string">'Wasps'</span>};
+</pre><p>Create an <tt>ImageDatastore</tt> in ImageDatastore images are not loaded into memory until read, making it efficient for use with large image collections.</p><pre class="codeinput">imds = imageDatastore(fullfile(rootFolder, categories),<span class="string">'IncludeSubfolders'</span>,true,<span class="keyword">...</span>
+    <span class="string">'LabelSource'</span>, <span class="string">'foldernames'</span>); <span class="comment">%</span>
+</pre><p>The image datastore <tt>imds</tt> variable now contains the images and the category labels associated with each image. The labels are automatically assigned from the folder names of the image files.</p><pre class="codeinput"><span class="comment">%we use |countEachLabel| to summarize</span>
+<span class="comment">% the number of images per category.</span>
+tbl = countEachLabel(imds)
+</pre><pre class="codeoutput">
+tbl = 
+
+       Label       Count
+    ___________    _____
+
+    Bees           1475 
+    Beetles        1490 
+    Butterflies    1462 
+    Flies          1196 
+    Moths          1236 
+    Wasps          1306 
+
+</pre><pre class="codeinput"><span class="comment">%The image datastore |imds| above contains an Unequal number of images per category,</span>
+<span class="comment">% We adjust it, so that the number of images in the training set</span>
+<span class="comment">% is balanced.</span>
+
+minSetCount = min(tbl{:,2}); <span class="comment">% determine the smallest amount of images in a category</span>
+
+<span class="comment">% we use splitEachLabel method to trim the image dataset with random images.</span>
+imds = splitEachLabel(imds, minSetCount, <span class="string">'randomize'</span>);
+
+<span class="comment">% Notice that each set now has exactly the same number of images.</span>
+countEachLabel(imds)
+</pre><pre class="codeoutput">
+ans = 
+
+       Label       Count
+    ___________    _____
+
+    Bees           1196 
+    Beetles        1196 
+    Butterflies    1196 
+    Flies          1196 
+    Moths          1196 
+    Wasps          1196 
+
+</pre><h2 id="8">upload Pre-trained Convolutional Neural Network (CNN)</h2><p>Location of pre-trained "AlexNet" the CNN was downloaded from its website <a href="http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz">http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz</a> Store CNN model in a temporary folder  bvlc_alexnet.caffemodel   imagenet-caffe-alex.mat</p><pre class="codeinput">cnnMatFile = fullfile(<span class="string">'/home/saldossa/Documents/MATLAB/PollinatorsRecognitionModel/imagenet-caffe-alex.mat'</span>);
+
+
+<span class="comment">% Load Pre-trained CNN</span>
+<span class="comment">% Load MatConvNet network into a SeriesNetwork</span>
+convnet = helperImportMatConvNet(cnnMatFile);
+
+<span class="comment">% display AlexNet Layers</span>
+convnet.Layers
+</pre><pre class="codeoutput">
+ans = 
+
+  23x1 Layer array with layers:
+
+     1   'input'                 Image Input                   227x227x3 images with 'zerocenter' normalization
+     2   'conv1'                 Convolution                   96 11x11x3 convolutions with stride [4  4] and padding [0  0]
+     3   'relu1'                 ReLU                          ReLU
+     4   'norm1'                 Cross Channel Normalization   cross channel normalization with 5 channels per element
+     5   'pool1'                 Max Pooling                   3x3 max pooling with stride [2  2] and padding [0  0]
+     6   'conv2'                 Convolution                   256 5x5x48 convolutions with stride [1  1] and padding [2  2]
+     7   'relu2'                 ReLU                          ReLU
+     8   'norm2'                 Cross Channel Normalization   cross channel normalization with 5 channels per element
+     9   'pool2'                 Max Pooling                   3x3 max pooling with stride [2  2] and padding [0  0]
+    10   'conv3'                 Convolution                   384 3x3x256 convolutions with stride [1  1] and padding [1  1]
+    11   'relu3'                 ReLU                          ReLU
+    12   'conv4'                 Convolution                   384 3x3x192 convolutions with stride [1  1] and padding [1  1]
+    13   'relu4'                 ReLU                          ReLU
+    14   'conv5'                 Convolution                   256 3x3x192 convolutions with stride [1  1] and padding [1  1]
+    15   'relu5'                 ReLU                          ReLU
+    16   'pool5'                 Max Pooling                   3x3 max pooling with stride [2  2] and padding [0  0]
+    17   'fc6'                   Fully Connected               4096 fully connected layer
+    18   'relu6'                 ReLU                          ReLU
+    19   'fc7'                   Fully Connected               4096 fully connected layer
+    20   'relu7'                 ReLU                          ReLU
+    21   'fc8'                   Fully Connected               1000 fully connected layer
+    22   'prob'                  Softmax                       softmax
+    23   'classificationLayer'   Classification Output         cross-entropy with 'n01440764', 'n01443537', and 998 other classes
+</pre><h2 id="9">fine-tune the last three layers for the new classification problem</h2><pre class="codeinput">layersTransfer = convnet.Layers(1:end-3);
+</pre><h2 id="10">modify the input layer we added the 'DataAugmentation' and set it to'randfliplr</h2><pre class="codeinput">layersTransfer(1) = imageInputLayer([227 227 3],<span class="string">'Name'</span>,<span class="string">'input'</span>,<span class="string">'DataAugmentation'</span>,<span class="string">'randfliplr'</span>,<span class="keyword">...</span>
+    <span class="string">'Normalization'</span>, <span class="string">'zerocenter'</span>);
+</pre><h2 id="11">Add dropout layer this layer is added to manage the overfitting of the algorithm</h2><p>this step was adopted from the second version of AlexNet CNN</p><pre class="codeinput">layersTransfer(end+1) = dropoutLayer();
+</pre><h2 id="12">the fully connected layer to classify the six classes</h2><pre class="codeinput"><span class="comment">%the  'WeightLearnRateFactor' were modified several times we used 10, 20,</span>
+<span class="comment">%with BiasLearnRateFactor 20,40 respectively both preduced the same results</span>
+<span class="comment">% then we trained smaller number</span>
+
+
+
+layersTransfer(end+1) = fullyConnectedLayer(6,<span class="keyword">...</span>
+    <span class="string">'WeightLearnRateFactor'</span>,2,<span class="keyword">...</span>
+    <span class="string">'BiasLearnRateFactor'</span>, 20,<span class="keyword">...</span>
+    <span class="string">'WeightL2Factor'</span>,1, <span class="keyword">...</span>
+    <span class="string">'BiasL2Factor'</span>, 0, <span class="keyword">...</span>
+    <span class="string">'Name'</span>,<span class="string">'tfc8'</span>);
+</pre><h2 id="13">adding a softmax layer and classification output layer</h2><pre class="codeinput">layersTransfer(end+1) = softmaxLayer(<span class="string">'Name'</span>, <span class="string">'prob'</span>);
+layersTransfer(end+1) = classificationLayer(<span class="string">'Name'</span>,<span class="string">'classificationLayer'</span>);
+</pre><h2 id="14">create the options of the transfer learning</h2><p>modify the 'MaxEpochs' from 5 to 10 did not add more to the results however with 70 to 100 epochs and intial learn rate 0.0011 the accuracy improved a little. We traied the intial learn rate 0.0001 and 0.000005 and performed best with weightLEarnRateFactor of 10  than with 2</p><pre class="codeinput">optionsTransfer = trainingOptions(<span class="string">'sgdm'</span>, <span class="keyword">...</span>
+    <span class="string">'MiniBatchSize'</span>,32,<span class="keyword">...</span>
+    <span class="string">'MaxEpochs'</span>,100, <span class="keyword">...</span>
+    <span class="string">'InitialLearnRate'</span> , 0.0011,<span class="keyword">...</span>
+    <span class="string">'Verbose'</span>,true)
+</pre><pre class="codeoutput">
+optionsTransfer = 
+
+  TrainingOptionsSGDM with properties:
+
+                     Momentum: 0.9000
+             InitialLearnRate: 0.0011
+    LearnRateScheduleSettings: [1&times;1 struct]
+             L2Regularization: 1.0000e-04
+                    MaxEpochs: 100
+                MiniBatchSize: 32
+                      Verbose: 1
+                      Shuffle: 'once'
+               CheckpointPath: ''
+
+</pre><h2 id="15">Pre-process Images For CNN</h2><p>setup the <tt>imds</tt> read function, <tt>imds.ReadFcn</tt>, to pre-process images to 227-by-227. and perform image translation.</p><pre class="codeinput"><span class="comment">%The |imds.ReadFcn| is called every time an image is read from the |ImageDatastore|.</span>
+<span class="comment">% see the end</span>
+
+<span class="comment">% Set the ImageDatastore ReadFcn</span>
+imds.ReadFcn = @(filename)readAndPreprocessImage(filename);
+</pre><h2 id="16">Prepare Training and Test Image Sets</h2><p>Split the sets into training and validation data. Pick 80% of images from each set for the training data and the remainder, 20%, for the validation data. Randomize the split to avoid biasing the results. The training and test sets will be processed by the CNN model.</p><pre class="codeinput">[trainingSet, testSet] = splitEachLabel(imds, 0.8, <span class="string">'randomize'</span>);
+</pre><h2 id="17">Preform transfer learning. trainingFeatures, trainingLabels must have same number of observation</h2><pre class="codeinput">[convnetTransfer,trainInfo] = trainNetwork(trainingSet,layersTransfer,optionsTransfer);
+
+
+<span class="comment">% View the CNN architecture</span>
+convnetTransfer.Layers
+
+
+<span class="comment">% Number of class names for P.R Model classification task</span>
+numel(convnetTransfer.Layers(end).ClassNames)
+</pre><h2 id="18">save the trained network and this is the file  (pRModel.mat) that will be used in the GUI</h2><pre class="codeinput">save(<span class="string">'pRModel.mat'</span>,<span class="string">'convnetTransfer'</span>)
+save(<span class="string">'testSet.mat'</span>,<span class="string">'testSet'</span>)
+</pre><h2 id="19">This part shows the use of classification (classifiers) functions within the code</h2><p>extract features from one of the deeper layers using the <tt>activations</tt> method. miniBatchSize modfy from 32 (max is 256) modify 'columns' to 'channels'|'rows'</p><pre class="codeinput">featureLayer = 20 ; <span class="comment">% modified 'fc7' to relu7; 20</span>
+trainingFeatures = activations(convnetTransfer, trainingSet, featureLayer, <span class="keyword">...</span>
+    <span class="string">'MiniBatchSize'</span>,32, <span class="string">'OutputAs'</span>, <span class="string">'columns'</span>);
+</pre><h2 id="20">Train A Multiclass SVM Classifier Using CNN Features</h2><p>useing the CNN image features to train a multiclass SVM classifier. Get training labels from the trainingSet</p><pre class="codeinput">trainingLabels = trainingSet.Labels;
+
+<span class="comment">% Train multiclass SVM classifier using a fast linear solver, and set</span>
+<span class="comment">% 'ObservationsIn' to 'columns' to match the arrangement used for training</span>
+<span class="comment">% features. 'onevsall'</span>
+
+  classifier = fitcecoc(trainingFeatures, trainingLabels,<span class="keyword">...</span>
+     <span class="string">'Learners'</span>, <span class="string">'linear'</span>, <span class="string">'Coding'</span>,<span class="string">'allpairs'</span>, <span class="string">'ObservationsIn'</span>,<span class="string">'columns'</span>);
+</pre><h2 id="21">Evaluate Classifier</h2><p>extract image features from|testSet|.</p><pre class="codeinput"><span class="comment">%The test features can then be passed to the classifier to</span>
+<span class="comment">% measure the accuracy of the trained classifier.</span>
+
+<span class="comment">% Extract test features using the CNN</span>
+testFeatures = activations(convnetTransfer, testSet, featureLayer,<span class="keyword">...</span>
+    <span class="string">'MiniBatchSize'</span>,32);
+
+<span class="comment">% Pass CNN image features to trained classifier</span>
+predictedLabels = predict(classifier, testFeatures);
+
+<span class="comment">% Get the known labels</span>
+testLabels = testSet.Labels;
+
+<span class="comment">% Tabulate the results using a confusion matrix.</span>
+confMat = confusionmat(testLabels, predictedLabels);
+
+<span class="comment">% Convert confusion matrix into percentage form</span>
+confMat = bsxfun(@rdivide,confMat,sum(confMat,2))
+</pre><pre class="codeoutput error">Error using nnet.internal.cnn.ImageDatastoreDispatcher&gt;iCellTo4DArray (line 212)
+Unexpected image size: All images must have the same size.
+
+Error in nnet.internal.cnn.ImageDatastoreDispatcher/next (line 126)
+                miniBatchData = iCellTo4DArray( images );
+
+Error in SeriesNetwork/activations (line 343)
+                [X, ~, i] = dispatcher.next();
+
+Error in PollinatorsRecognitionModel (line 204)
+testFeatures = activations(convnetTransfer, testSet, featureLayer,...
+</pre><h2 id="22">to save miss-predicted lebles</h2><pre class="codeinput">idx = numel(testSet.Files)
+
+pathPositive = fullfile(<span class="string">'/home/saldossa/Documents/MATLAB/PollinatorsRecognitionModel/Positive'</span>);
+pathNegative = fullfile(<span class="string">'/home/saldossa/Documents/MATLAB/PollinatorsRecognitionModel/Negative'</span>);
+
+
+<span class="keyword">for</span> i = 1: idx
+
+   I = readimage(testSet,i);
+
+<span class="keyword">if</span> predictedLabels(i) == testLabels(i)
+
+    imwrite(I,fullfile(pathPositive,[ char(predictedLabels(i)),char(testLabels(i)) ,num2str(i),<span class="string">'.png'</span>]));
+
+<span class="keyword">else</span>
+
+    imwrite(I,fullfile(pathNegative,[ char(predictedLabels(i)),char(testLabels(i)) ,num2str(i),<span class="string">'.png'</span>]));
+
+<span class="keyword">end</span>
+
+
+<span class="keyword">end</span>
+</pre><h2 id="23">both methods showed the same results</h2><pre class="codeinput"><span class="comment">% Display the mean accuracy</span>
+meanAccuracy = mean(diag(confMat))
+
+<span class="comment">% numel is the number of elements</span>
+accuracy = sum(predictedLabels == testLabels)/numel(predictedLabels)
+</pre><h2 id="24">Try the Newly Trained Classifier on Test Images</h2><p>You can now apply the newly trained classifier to categorize new images.</p><pre class="codeinput">newImage = imgetfile();
+</pre><p>Pre-process the images as required for the CNN</p><pre class="codeinput">imgtest = readAndPreprocessImage(newImage);
+</pre><p>Extract image features using the CNN</p><pre class="codeinput">imageFeatures = activations(convnetTransfer, imgtest, featureLayer);
+</pre><pre class="codeinput"><span class="comment">% Make a prediction using the classifier</span>
+label = predict(classifier, imageFeatures)
+</pre><h2 id="28">Display image with the predicted classfication</h2><pre class="codeinput">figure
+imshow(imgtest)
+<span class="keyword">if</span> accuracy &lt;= 0.85
+    title([<span class="string">'\color{red}Predicted CLASS: '</span>,char(label)])
+<span class="keyword">else</span>
+    title([<span class="string">'\color{green}Predicted CLASS: '</span>,char(label)])
+<span class="keyword">end</span>
+drawnow
+</pre><h2 id="29">visualize the matrix using</h2><pre class="codeinput">tlabels = dummyvar(double(testLabels))';
+plabels = dummyvar(double(predictedLabels))';
+<span class="comment">%plotconfusion(tlabels, plabels,'PR Model')</span>
+
+
+pathCharts = fullfile(<span class="string">'/home/saldossa/Documents/MATLAB/PollinatorsRecognitionModel/charts'</span>);
+
+figure
+saveas(plotconfusion(tlabels, plabels,<span class="string">'PR Model'</span>),<span class="string">'PRModelConfMat.png'</span>)
+drawnow
+
+figure
+saveas(plotroc(tlabels,plabels),<span class="string">'PRModelROC.png'</span>)
+drawnow
+</pre><h2 id="30">the pre-processing function</h2><pre class="codeinput"><span class="comment">% other CNN models have different input size constraints,</span>
+<span class="comment">% and may require other pre-processing steps.</span>
+    <span class="keyword">function</span> Iout = readAndPreprocessImage(filename)
+
+        I = imread(filename);
+
+
+         <span class="comment">% Some images may be grayscale. Replicate the image 3 times to</span>
+         <span class="comment">% create an RGB image.</span>
+         <span class="keyword">if</span> ismatrix(I)
+             I = cat(3,I,I,I);
+         <span class="keyword">end</span>
+
+
+         <span class="comment">% translate image 25.3</span>
+          I = imtranslate(I,[25.3, -10.1],<span class="string">'FillValues'</span>,255);
+
+
+        <span class="comment">% Resize the image as required for the CNN.</span>
+        Iout = imresize(I, [227 227]);
+
+    <span class="keyword">end</span>
+</pre><pre class="codeoutput">|=========================================================================================|
+|     Epoch    |   Iteration  | Time Elapsed |  Mini-batch  |  Mini-batch  | Base Learning|
+|              |              |  (seconds)   |     Loss     |   Accuracy   |     Rate     |
+|=========================================================================================|
+|            1 |           50 |        32.54 |       1.1232 |       53.12% |     0.001100 |
+|            1 |          100 |        64.19 |       1.1881 |       50.00% |     0.001100 |
+|            1 |          150 |        98.30 |       1.1453 |       50.00% |     0.001100 |
+|            2 |          200 |       131.38 |       1.2387 |       56.25% |     0.001100 |
+|            2 |          250 |       165.30 |       0.5549 |       78.12% |     0.001100 |
+|            2 |          300 |       199.16 |       1.0328 |       62.50% |     0.001100 |
+|            2 |          350 |       232.65 |       0.6171 |       75.00% |     0.001100 |
+|            3 |          400 |       266.51 |       0.5711 |       81.25% |     0.001100 |
+|            3 |          450 |       300.03 |       0.6647 |       75.00% |     0.001100 |
+|            3 |          500 |       333.32 |       0.7144 |       75.00% |     0.001100 |
+|            4 |          550 |       366.39 |       0.4781 |       78.12% |     0.001100 |
+|            4 |          600 |       399.99 |       0.2237 |       93.75% |     0.001100 |
+|            4 |          650 |       433.20 |       0.5708 |       81.25% |     0.001100 |
+|            4 |          700 |       466.34 |       0.4590 |       84.38% |     0.001100 |
+|            5 |          750 |       499.95 |       0.6621 |       78.12% |     0.001100 |
+|            5 |          800 |       532.93 |       0.4458 |       87.50% |     0.001100 |
+|            5 |          850 |       566.14 |       0.2278 |       93.75% |     0.001100 |
+|            6 |          900 |       599.67 |       0.2292 |       90.62% |     0.001100 |
+|            6 |          950 |       633.71 |       0.5659 |       78.12% |     0.001100 |
+|            6 |         1000 |       666.83 |       0.2447 |       96.88% |     0.001100 |
+|            6 |         1050 |       698.74 |       0.1285 |      100.00% |     0.001100 |
+|            7 |         1100 |       731.13 |       0.1657 |       93.75% |     0.001100 |
+|            7 |         1150 |       764.09 |       0.4787 |       84.38% |     0.001100 |
+|            7 |         1200 |       796.43 |       0.1018 |      100.00% |     0.001100 |
+|            7 |         1250 |       829.63 |       0.2438 |       90.62% |     0.001100 |
+|            8 |         1300 |       862.04 |       0.2576 |       93.75% |     0.001100 |
+|            8 |         1350 |       894.28 |       0.3426 |       87.50% |     0.001100 |
+|            8 |         1400 |       927.22 |       0.1187 |       93.75% |     0.001100 |
+|            9 |         1450 |       960.60 |       0.1648 |       93.75% |     0.001100 |
+|            9 |         1500 |       993.31 |       0.1651 |       93.75% |     0.001100 |
+|            9 |         1550 |      1027.03 |       0.2556 |       90.62% |     0.001100 |
+|            9 |         1600 |      1058.95 |       0.0445 |      100.00% |     0.001100 |
+|           10 |         1650 |      1090.93 |       0.0898 |      100.00% |     0.001100 |
+|           10 |         1700 |      1124.04 |       0.0813 |       96.88% |     0.001100 |
+|           10 |         1750 |      1156.21 |       0.0490 |      100.00% |     0.001100 |
+|           11 |         1800 |      1188.66 |       0.0261 |      100.00% |     0.001100 |
+|           11 |         1850 |      1221.49 |       0.4465 |       87.50% |     0.001100 |
+|           11 |         1900 |      1253.82 |       0.2339 |       93.75% |     0.001100 |
+|           11 |         1950 |      1286.76 |       0.3137 |       93.75% |     0.001100 |
+|           12 |         2000 |      1319.33 |       0.1116 |       93.75% |     0.001100 |
+|           12 |         2050 |      1351.76 |       0.0892 |       96.88% |     0.001100 |
+|           12 |         2100 |      1385.52 |       0.0179 |      100.00% |     0.001100 |
+|           13 |         2150 |      1417.80 |       0.0975 |       96.88% |     0.001100 |
+|           13 |         2200 |      1450.50 |       0.0675 |       96.88% |     0.001100 |
+|           13 |         2250 |      1483.63 |       0.0885 |       96.88% |     0.001100 |
+|           13 |         2300 |      1517.50 |       0.1258 |       93.75% |     0.001100 |
+|           14 |         2350 |      1550.04 |       0.0161 |      100.00% |     0.001100 |
+|           14 |         2400 |      1583.35 |       0.1886 |       93.75% |     0.001100 |
+|           14 |         2450 |      1616.33 |       0.0804 |       93.75% |     0.001100 |
+|           14 |         2500 |      1649.20 |       0.0396 |       96.88% |     0.001100 |
+|           15 |         2550 |      1682.37 |       0.0682 |       96.88% |     0.001100 |
+|           15 |         2600 |      1715.45 |       0.0126 |      100.00% |     0.001100 |
+|           15 |         2650 |      1748.90 |       0.0439 |       96.88% |     0.001100 |
+|           16 |         2700 |      1783.26 |       0.0076 |      100.00% |     0.001100 |
+|           16 |         2750 |      1816.50 |       0.0020 |      100.00% |     0.001100 |
+|           16 |         2800 |      1849.86 |       0.1260 |       93.75% |     0.001100 |
+|           16 |         2850 |      1882.24 |       0.0094 |      100.00% |     0.001100 |
+|           17 |         2900 |      1915.83 |       0.0106 |      100.00% |     0.001100 |
+|           17 |         2950 |      1949.25 |       0.0656 |       93.75% |     0.001100 |
+|           17 |         3000 |      1982.73 |       0.0128 |      100.00% |     0.001100 |
+|           18 |         3050 |      2015.69 |       0.0077 |      100.00% |     0.001100 |
+|           18 |         3100 |      2048.12 |       0.0841 |       96.88% |     0.001100 |
+|           18 |         3150 |      2081.53 |       0.0200 |      100.00% |     0.001100 |
+|           18 |         3200 |      2114.66 |       0.0792 |       96.88% |     0.001100 |
+|           19 |         3250 |      2147.57 |       0.0025 |      100.00% |     0.001100 |
+|           19 |         3300 |      2180.52 |       0.0058 |      100.00% |     0.001100 |
+|           19 |         3350 |      2214.46 |       0.0148 |      100.00% |     0.001100 |
+|           19 |         3400 |      2247.68 |       0.0202 |      100.00% |     0.001100 |
+|           20 |         3450 |      2280.34 |       0.0172 |      100.00% |     0.001100 |
+|           20 |         3500 |      2313.80 |       0.0082 |      100.00% |     0.001100 |
+|           20 |         3550 |      2347.07 |       0.0003 |      100.00% |     0.001100 |
+|           21 |         3600 |      2379.81 |       0.0010 |      100.00% |     0.001100 |
+|           21 |         3650 |      2412.35 |       0.0047 |      100.00% |     0.001100 |
+|           21 |         3700 |      2444.78 |       0.1474 |       93.75% |     0.001100 |
+|           21 |         3750 |      2477.51 |       0.0125 |      100.00% |     0.001100 |
+|           22 |         3800 |      2510.09 |       0.0378 |       96.88% |     0.001100 |
+|           22 |         3850 |      2543.30 |       0.0075 |      100.00% |     0.001100 |
+|           22 |         3900 |      2575.79 |       0.0030 |      100.00% |     0.001100 |
+|           23 |         3950 |      2608.01 |       0.0005 |      100.00% |     0.001100 |
+|           23 |         4000 |      2641.17 |       0.0002 |      100.00% |     0.001100 |
+|           23 |         4050 |      2674.14 |       0.0008 |      100.00% |     0.001100 |
+|           23 |         4100 |      2707.44 |       0.0009 |      100.00% |     0.001100 |
+|           24 |         4150 |      2740.78 |       0.0006 |      100.00% |     0.001100 |
+|           24 |         4200 |      2773.77 |       0.0056 |      100.00% |     0.001100 |
+|           24 |         4250 |      2806.96 |       0.0009 |      100.00% |     0.001100 |
+|           25 |         4300 |      2839.37 |       0.0003 |      100.00% |     0.001100 |
+|           25 |         4350 |      2872.44 |       0.0026 |      100.00% |     0.001100 |
+|           25 |         4400 |      2904.34 |       0.0184 |      100.00% |     0.001100 |
+|           25 |         4450 |      2936.47 |       0.0009 |      100.00% |     0.001100 |
+|           26 |         4500 |      2969.17 |       0.0005 |      100.00% |     0.001100 |
+|           26 |         4550 |      3001.96 |       0.0011 |      100.00% |     0.001100 |
+|           26 |         4600 |      3033.98 |       0.0020 |      100.00% |     0.001100 |
+|           26 |         4650 |      3066.26 |       0.0039 |      100.00% |     0.001100 |
+|           27 |         4700 |      3099.49 |       0.0133 |      100.00% |     0.001100 |
+|           27 |         4750 |      3132.71 |       0.0001 |      100.00% |     0.001100 |
+|           27 |         4800 |      3165.83 |       0.0001 |      100.00% |     0.001100 |
+|           28 |         4850 |      3198.97 |       0.0022 |      100.00% |     0.001100 |
+|           28 |         4900 |      3231.81 |       0.0198 |      100.00% |     0.001100 |
+|           28 |         4950 |      3264.38 |       0.0021 |      100.00% |     0.001100 |
+|           28 |         5000 |      3296.72 |       0.0006 |      100.00% |     0.001100 |
+|           29 |         5050 |      3329.28 |       0.0000 |      100.00% |     0.001100 |
+|           29 |         5100 |      3362.40 |       0.0010 |      100.00% |     0.001100 |
+|           29 |         5150 |      3395.69 |       0.0011 |      100.00% |     0.001100 |
+|           30 |         5200 |      3428.82 |       0.0022 |      100.00% |     0.001100 |
+|           30 |         5250 |      3461.86 |       0.0018 |      100.00% |     0.001100 |
+|           30 |         5300 |      3495.03 |       0.0242 |      100.00% |     0.001100 |
+|           30 |         5350 |      3527.85 |       0.0003 |      100.00% |     0.001100 |
+|           31 |         5400 |      3560.87 |       0.0004 |      100.00% |     0.001100 |
+|           31 |         5450 |      3594.40 |       0.0000 |      100.00% |     0.001100 |
+|           31 |         5500 |      3627.10 |       0.0001 |      100.00% |     0.001100 |
+|           32 |         5550 |      3659.49 |       0.0001 |      100.00% |     0.001100 |
+|           32 |         5600 |      3691.73 |       0.0002 |      100.00% |     0.001100 |
+|           32 |         5650 |      3724.29 |       0.0000 |      100.00% |     0.001100 |
+|           32 |         5700 |      3757.20 |       0.0000 |      100.00% |     0.001100 |
+|           33 |         5750 |      3789.70 |       0.0001 |      100.00% |     0.001100 |
+|           33 |         5800 |      3822.82 |       0.0001 |      100.00% |     0.001100 |
+|           33 |         5850 |      3855.39 |       0.0000 |      100.00% |     0.001100 |
+|           33 |         5900 |      3889.02 |       0.0001 |      100.00% |     0.001100 |
+|           34 |         5950 |      3922.41 |       0.0000 |      100.00% |     0.001100 |
+|           34 |         6000 |      3955.17 |       0.0003 |      100.00% |     0.001100 |
+|           34 |         6050 |      3986.51 |       0.0006 |      100.00% |     0.001100 |
+|           35 |         6100 |      4019.93 |       0.0001 |      100.00% |     0.001100 |
+|           35 |         6150 |      4053.06 |       0.0000 |      100.00% |     0.001100 |
+|           35 |         6200 |      4086.07 |       0.0001 |      100.00% |     0.001100 |
+|           35 |         6250 |      4118.13 |       0.0000 |      100.00% |     0.001100 |
+|           36 |         6300 |      4151.56 |       0.0003 |      100.00% |     0.001100 |
+|           36 |         6350 |      4183.43 |       0.0003 |      100.00% |     0.001100 |
+|           36 |         6400 |      4215.66 |       0.0000 |      100.00% |     0.001100 |
+|           37 |         6450 |      4247.82 |       0.0000 |      100.00% |     0.001100 |
+|           37 |         6500 |      4280.06 |       0.0000 |      100.00% |     0.001100 |
+|           37 |         6550 |      4313.11 |       0.0001 |      100.00% |     0.001100 |
+|           37 |         6600 |      4345.63 |       0.0000 |      100.00% |     0.001100 |
+|           38 |         6650 |      4378.19 |       0.0001 |      100.00% |     0.001100 |
+|           38 |         6700 |      4411.60 |       0.0000 |      100.00% |     0.001100 |
+|           38 |         6750 |      4444.57 |       0.0000 |      100.00% |     0.001100 |
+|           38 |         6800 |      4477.00 |       0.0002 |      100.00% |     0.001100 |
+|           39 |         6850 |      4510.33 |       0.0006 |      100.00% |     0.001100 |
+|           39 |         6900 |      4543.74 |       0.0000 |      100.00% |     0.001100 |
+|           39 |         6950 |      4577.00 |       0.0000 |      100.00% |     0.001100 |
+|           40 |         7000 |      4610.11 |       0.0000 |      100.00% |     0.001100 |
+|           40 |         7050 |      4642.61 |       0.0000 |      100.00% |     0.001100 |
+|           40 |         7100 |      4675.32 |       0.0000 |      100.00% |     0.001100 |
+|           40 |         7150 |      4707.75 |       0.0003 |      100.00% |     0.001100 |
+|           41 |         7200 |      4740.16 |       0.0001 |      100.00% |     0.001100 |
+|           41 |         7250 |      4772.02 |       0.0000 |      100.00% |     0.001100 |
+|           41 |         7300 |      4804.76 |       0.0000 |      100.00% |     0.001100 |
+|           42 |         7350 |      4837.34 |       0.0000 |      100.00% |     0.001100 |
+|           42 |         7400 |      4870.11 |       0.0001 |      100.00% |     0.001100 |
+|           42 |         7450 |      4902.85 |       0.0000 |      100.00% |     0.001100 |
+|           42 |         7500 |      4935.07 |       0.0001 |      100.00% |     0.001100 |
+|           43 |         7550 |      4968.00 |       0.0007 |      100.00% |     0.001100 |
+|           43 |         7600 |      5000.29 |       0.0000 |      100.00% |     0.001100 |
+|           43 |         7650 |      5033.36 |       0.0363 |       96.88% |     0.001100 |
+|           44 |         7700 |      5065.57 |       0.0000 |      100.00% |     0.001100 |
+|           44 |         7750 |      5097.29 |       0.0002 |      100.00% |     0.001100 |
+|           44 |         7800 |      5129.65 |       0.0002 |      100.00% |     0.001100 |
+|           44 |         7850 |      5162.21 |       0.0000 |      100.00% |     0.001100 |
+|           45 |         7900 |      5193.82 |       0.0000 |      100.00% |     0.001100 |
+|           45 |         7950 |      5226.11 |       0.0001 |      100.00% |     0.001100 |
+|           45 |         8000 |      5259.04 |       0.0000 |      100.00% |     0.001100 |
+|           45 |         8050 |      5291.75 |       0.0000 |      100.00% |     0.001100 |
+|           46 |         8100 |      5323.91 |       0.0000 |      100.00% |     0.001100 |
+|           46 |         8150 |      5355.81 |       0.0000 |      100.00% |     0.001100 |
+|           46 |         8200 |      5388.49 |       0.0014 |      100.00% |     0.001100 |
+|           47 |         8250 |      5421.00 |       0.0015 |      100.00% |     0.001100 |
+|           47 |         8300 |      5453.63 |       0.0000 |      100.00% |     0.001100 |
+|           47 |         8350 |      5485.69 |       0.0001 |      100.00% |     0.001100 |
+|           47 |         8400 |      5517.98 |       0.0000 |      100.00% |     0.001100 |
+|           48 |         8450 |      5549.98 |       0.0000 |      100.00% |     0.001100 |
+|           48 |         8500 |      5581.43 |       0.0001 |      100.00% |     0.001100 |
+|           48 |         8550 |      5612.55 |       0.0003 |      100.00% |     0.001100 |
+|           49 |         8600 |      5643.92 |       0.0001 |      100.00% |     0.001100 |
+|           49 |         8650 |      5675.21 |       0.0000 |      100.00% |     0.001100 |
+|           49 |         8700 |      5707.26 |       0.0000 |      100.00% |     0.001100 |
+|           49 |         8750 |      5739.10 |       0.0001 |      100.00% |     0.001100 |
+|           50 |         8800 |      5772.19 |       0.0000 |      100.00% |     0.001100 |
+|           50 |         8850 |      5804.44 |       0.0000 |      100.00% |     0.001100 |
+|           50 |         8900 |      5836.61 |       0.0000 |      100.00% |     0.001100 |
+|           50 |         8950 |      5868.59 |       0.0003 |      100.00% |     0.001100 |
+|           51 |         9000 |      5901.31 |       0.0000 |      100.00% |     0.001100 |
+|           51 |         9050 |      5934.33 |       0.0005 |      100.00% |     0.001100 |
+|           51 |         9100 |      5967.71 |       0.0001 |      100.00% |     0.001100 |
+|           52 |         9150 |      6001.11 |       0.0001 |      100.00% |     0.001100 |
+|           52 |         9200 |      6033.45 |       0.0001 |      100.00% |     0.001100 |
+|           52 |         9250 |      6066.03 |       0.0000 |      100.00% |     0.001100 |
+|           52 |         9300 |      6098.97 |       0.0000 |      100.00% |     0.001100 |
+|           53 |         9350 |      6131.29 |       0.0000 |      100.00% |     0.001100 |
+|           53 |         9400 |      6164.19 |       0.0001 |      100.00% |     0.001100 |
+|           53 |         9450 |      6196.82 |       0.0000 |      100.00% |     0.001100 |
+|           54 |         9500 |      6230.05 |       0.0000 |      100.00% |     0.001100 |
+|           54 |         9550 |      6262.59 |       0.0000 |      100.00% |     0.001100 |
+|           54 |         9600 |      6295.66 |       0.0000 |      100.00% |     0.001100 |
+|           54 |         9650 |      6328.03 |       0.0002 |      100.00% |     0.001100 |
+|           55 |         9700 |      6360.31 |       0.0000 |      100.00% |     0.001100 |
+|           55 |         9750 |      6392.69 |       0.0000 |      100.00% |     0.001100 |
+|           55 |         9800 |      6425.28 |       0.0000 |      100.00% |     0.001100 |
+|           56 |         9850 |      6457.99 |       0.0000 |      100.00% |     0.001100 |
+|           56 |         9900 |      6490.72 |       0.0000 |      100.00% |     0.001100 |
+|           56 |         9950 |      6523.83 |       0.0000 |      100.00% |     0.001100 |
+|           56 |        10000 |      6556.28 |       0.0000 |      100.00% |     0.001100 |
+|           57 |        10050 |      6588.73 |       0.0000 |      100.00% |     0.001100 |
+|           57 |        10100 |      6621.17 |       0.0000 |      100.00% |     0.001100 |
+|           57 |        10150 |      6653.40 |       0.0000 |      100.00% |     0.001100 |
+|           57 |        10200 |      6685.41 |       0.0000 |      100.00% |     0.001100 |
+|           58 |        10250 |      6718.14 |       0.0000 |      100.00% |     0.001100 |
+|           58 |        10300 |      6750.03 |       0.0001 |      100.00% |     0.001100 |
+|           58 |        10350 |      6782.42 |       0.0002 |      100.00% |     0.001100 |
+|           59 |        10400 |      6814.18 |       0.0003 |      100.00% |     0.001100 |
+|           59 |        10450 |      6847.84 |       0.0002 |      100.00% |     0.001100 |
+|           59 |        10500 |      6879.93 |       0.0000 |      100.00% |     0.001100 |
+|           59 |        10550 |      6912.91 |       0.0000 |      100.00% |     0.001100 |
+|           60 |        10600 |      6945.09 |       0.0001 |      100.00% |     0.001100 |
+|           60 |        10650 |      6977.67 |       0.0002 |      100.00% |     0.001100 |
+|           60 |        10700 |      7009.75 |       0.0000 |      100.00% |     0.001100 |
+|           61 |        10750 |      7042.56 |       0.0002 |      100.00% |     0.001100 |
+|           61 |        10800 |      7075.08 |       0.0000 |      100.00% |     0.001100 |
+|           61 |        10850 |      7107.44 |       0.0005 |      100.00% |     0.001100 |
+|           61 |        10900 |      7140.15 |       0.0000 |      100.00% |     0.001100 |
+|           62 |        10950 |      7172.13 |       0.0000 |      100.00% |     0.001100 |
+|           62 |        11000 |      7204.78 |       0.0000 |      100.00% |     0.001100 |
+|           62 |        11050 |      7238.18 |       0.0001 |      100.00% |     0.001100 |
+|           63 |        11100 |      7271.12 |       0.0001 |      100.00% |     0.001100 |
+|           63 |        11150 |      7304.01 |       0.0000 |      100.00% |     0.001100 |
+|           63 |        11200 |      7336.86 |       0.0000 |      100.00% |     0.001100 |
+|           63 |        11250 |      7369.80 |       0.0001 |      100.00% |     0.001100 |
+|           64 |        11300 |      7402.33 |       0.0000 |      100.00% |     0.001100 |
+|           64 |        11350 |      7434.73 |       0.0001 |      100.00% |     0.001100 |
+|           64 |        11400 |      7466.87 |       0.0000 |      100.00% |     0.001100 |
+|           64 |        11450 |      7498.94 |       0.0001 |      100.00% |     0.001100 |
+|           65 |        11500 |      7531.08 |       0.0001 |      100.00% |     0.001100 |
+|           65 |        11550 |      7563.71 |       0.0001 |      100.00% |     0.001100 |
+|           65 |        11600 |      7595.24 |       0.0000 |      100.00% |     0.001100 |
+|           66 |        11650 |      7628.10 |       0.0000 |      100.00% |     0.001100 |
+|           66 |        11700 |      7660.94 |       0.0000 |      100.00% |     0.001100 |
+|           66 |        11750 |      7693.57 |       0.0001 |      100.00% |     0.001100 |
+|           66 |        11800 |      7725.89 |       0.0000 |      100.00% |     0.001100 |
+|           67 |        11850 |      7758.74 |       0.0000 |      100.00% |     0.001100 |
+|           67 |        11900 |      7791.43 |       0.0000 |      100.00% |     0.001100 |
+|           67 |        11950 |      7824.21 |       0.0000 |      100.00% |     0.001100 |
+|           68 |        12000 |      7856.72 |       0.0000 |      100.00% |     0.001100 |
+|           68 |        12050 |      7889.70 |       0.0000 |      100.00% |     0.001100 |
+|           68 |        12100 |      7922.45 |       0.0000 |      100.00% |     0.001100 |
+|           68 |        12150 |      7955.29 |       0.0000 |      100.00% |     0.001100 |
+|           69 |        12200 |      7987.09 |       0.0000 |      100.00% |     0.001100 |
+|           69 |        12250 |      8019.08 |       0.0002 |      100.00% |     0.001100 |
+|           69 |        12300 |      8052.19 |       0.0000 |      100.00% |     0.001100 |
+|           69 |        12350 |      8084.13 |       0.0001 |      100.00% |     0.001100 |
+|           70 |        12400 |      8116.65 |       0.0000 |      100.00% |     0.001100 |
+|           70 |        12450 |      8149.64 |       0.0000 |      100.00% |     0.001100 |
+|           70 |        12500 |      8182.01 |       0.0000 |      100.00% |     0.001100 |
+|           71 |        12550 |      8214.38 |       0.0000 |      100.00% |     0.001100 |
+|           71 |        12600 |      8245.94 |       0.0000 |      100.00% |     0.001100 |
+|           71 |        12650 |      8278.32 |       0.0001 |      100.00% |     0.001100 |
+|           71 |        12700 |      8311.26 |       0.0000 |      100.00% |     0.001100 |
+|           72 |        12750 |      8343.93 |       0.0001 |      100.00% |     0.001100 |
+|           72 |        12800 |      8376.15 |       0.0001 |      100.00% |     0.001100 |
+|           72 |        12850 |      8408.82 |       0.0000 |      100.00% |     0.001100 |
+|           73 |        12900 |      8441.54 |       0.0000 |      100.00% |     0.001100 |
+|           73 |        12950 |      8474.16 |       0.0000 |      100.00% |     0.001100 |
+|           73 |        13000 |      8507.35 |       0.0000 |      100.00% |     0.001100 |
+|           73 |        13050 |      8540.36 |       0.0002 |      100.00% |     0.001100 |
+|           74 |        13100 |      8573.33 |       0.0000 |      100.00% |     0.001100 |
+|           74 |        13150 |      8605.84 |       0.0000 |      100.00% |     0.001100 |
+|           74 |        13200 |      8638.13 |       0.0001 |      100.00% |     0.001100 |
+|           75 |        13250 |      8670.65 |       0.0000 |      100.00% |     0.001100 |
+|           75 |        13300 |      8702.89 |       0.0000 |      100.00% |     0.001100 |
+|           75 |        13350 |      8734.94 |       0.0000 |      100.00% |     0.001100 |
+|           75 |        13400 |      8767.57 |       0.0000 |      100.00% |     0.001100 |
+|           76 |        13450 |      8800.37 |       0.0000 |      100.00% |     0.001100 |
+|           76 |        13500 |      8833.10 |       0.0001 |      100.00% |     0.001100 |
+|           76 |        13550 |      8866.13 |       0.0001 |      100.00% |     0.001100 |
+|           76 |        13600 |      8898.70 |       0.0000 |      100.00% |     0.001100 |
+|           77 |        13650 |      8931.47 |       0.0001 |      100.00% |     0.001100 |
+|           77 |        13700 |      8964.40 |       0.0000 |      100.00% |     0.001100 |
+|           77 |        13750 |      8996.53 |       0.0000 |      100.00% |     0.001100 |
+|           78 |        13800 |      9028.90 |       0.0001 |      100.00% |     0.001100 |
+|           78 |        13850 |      9062.33 |       0.0000 |      100.00% |     0.001100 |
+|           78 |        13900 |      9094.17 |       0.0000 |      100.00% |     0.001100 |
+|           78 |        13950 |      9126.14 |       0.0000 |      100.00% |     0.001100 |
+|           79 |        14000 |      9157.94 |       0.0000 |      100.00% |     0.001100 |
+|           79 |        14050 |      9190.55 |       0.0000 |      100.00% |     0.001100 |
+|           79 |        14100 |      9222.45 |       0.0001 |      100.00% |     0.001100 |
+|           80 |        14150 |      9254.53 |       0.0000 |      100.00% |     0.001100 |
+|           80 |        14200 |      9287.00 |       0.0000 |      100.00% |     0.001100 |
+|           80 |        14250 |      9319.50 |       0.0000 |      100.00% |     0.001100 |
+|           80 |        14300 |      9351.37 |       0.0000 |      100.00% |     0.001100 |
+|           81 |        14350 |      9384.47 |       0.0000 |      100.00% |     0.001100 |
+|           81 |        14400 |      9417.07 |       0.0000 |      100.00% |     0.001100 |
+|           81 |        14450 |      9450.97 |       0.0001 |      100.00% |     0.001100 |
+|           82 |        14500 |      9484.17 |       0.0000 |      100.00% |     0.001100 |
+|           82 |        14550 |      9516.35 |       0.0000 |      100.00% |     0.001100 |
+|           82 |        14600 |      9549.89 |       0.0000 |      100.00% |     0.001100 |
+|           82 |        14650 |      9583.26 |       0.0000 |      100.00% |     0.001100 |
+|           83 |        14700 |      9616.68 |       0.0001 |      100.00% |     0.001100 |
+|           83 |        14750 |      9649.51 |       0.0000 |      100.00% |     0.001100 |
+|           83 |        14800 |      9682.01 |       0.0000 |      100.00% |     0.001100 |
+|           83 |        14850 |      9713.89 |       0.0000 |      100.00% |     0.001100 |
+|           84 |        14900 |      9746.23 |       0.0000 |      100.00% |     0.001100 |
+|           84 |        14950 |      9778.51 |       0.0004 |      100.00% |     0.001100 |
+|           84 |        15000 |      9810.95 |       0.0000 |      100.00% |     0.001100 |
+|           85 |        15050 |      9844.48 |       0.0000 |      100.00% |     0.001100 |
+|           85 |        15100 |      9877.23 |       0.0000 |      100.00% |     0.001100 |
+|           85 |        15150 |      9909.94 |       0.0013 |      100.00% |     0.001100 |
+|           85 |        15200 |      9942.49 |       0.0000 |      100.00% |     0.001100 |
+|           86 |        15250 |      9974.39 |       0.0000 |      100.00% |     0.001100 |
+|           86 |        15300 |     10005.77 |       0.0000 |      100.00% |     0.001100 |
+|           86 |        15350 |     10037.85 |       0.0000 |      100.00% |     0.001100 |
+|           87 |        15400 |     10070.61 |       0.0000 |      100.00% |     0.001100 |
+|           87 |        15450 |     10103.06 |       0.0000 |      100.00% |     0.001100 |
+|           87 |        15500 |     10135.03 |       0.0001 |      100.00% |     0.001100 |
+|           87 |        15550 |     10167.49 |       0.0000 |      100.00% |     0.001100 |
+|           88 |        15600 |     10200.04 |       0.0001 |      100.00% |     0.001100 |
+|           88 |        15650 |     10232.60 |       0.0000 |      100.00% |     0.001100 |
+|           88 |        15700 |     10265.91 |       0.0000 |      100.00% |     0.001100 |
+|           88 |        15750 |     10299.28 |       0.0000 |      100.00% |     0.001100 |
+|           89 |        15800 |     10331.47 |       0.0001 |      100.00% |     0.001100 |
+|           89 |        15850 |     10363.76 |       0.0000 |      100.00% |     0.001100 |
+|           89 |        15900 |     10395.82 |       0.0000 |      100.00% |     0.001100 |
+|           90 |        15950 |     10427.50 |       0.0000 |      100.00% |     0.001100 |
+|           90 |        16000 |     10460.32 |       0.0000 |      100.00% |     0.001100 |
+|           90 |        16050 |     10492.82 |       0.0000 |      100.00% |     0.001100 |
+|           90 |        16100 |     10524.75 |       0.0000 |      100.00% |     0.001100 |
+|           91 |        16150 |     10556.30 |       0.0000 |      100.00% |     0.001100 |
+|           91 |        16200 |     10588.80 |       0.0000 |      100.00% |     0.001100 |
+|           91 |        16250 |     10621.43 |       0.0000 |      100.00% |     0.001100 |
+|           92 |        16300 |     10654.81 |       0.0000 |      100.00% |     0.001100 |
+|           92 |        16350 |     10687.84 |       0.0000 |      100.00% |     0.001100 |
+|           92 |        16400 |     10719.66 |       0.0000 |      100.00% |     0.001100 |
+|           92 |        16450 |     10751.82 |       0.0000 |      100.00% |     0.001100 |
+|           93 |        16500 |     10784.01 |       0.0000 |      100.00% |     0.001100 |
+|           93 |        16550 |     10816.27 |       0.0000 |      100.00% |     0.001100 |
+|           93 |        16600 |     10848.58 |       0.0001 |      100.00% |     0.001100 |
+|           94 |        16650 |     10880.03 |       0.0000 |      100.00% |     0.001100 |
+|           94 |        16700 |     10911.58 |       0.0000 |      100.00% |     0.001100 |
+|           94 |        16750 |     10944.40 |       0.0000 |      100.00% |     0.001100 |
+|           94 |        16800 |     10976.78 |       0.0000 |      100.00% |     0.001100 |
+|           95 |        16850 |     11009.46 |       0.0000 |      100.00% |     0.001100 |
+|           95 |        16900 |     11041.51 |       0.0000 |      100.00% |     0.001100 |
+|           95 |        16950 |     11072.64 |       0.0000 |      100.00% |     0.001100 |
+|           95 |        17000 |     11103.93 |       0.0000 |      100.00% |     0.001100 |
+|           96 |        17050 |     11135.97 |       0.0000 |      100.00% |     0.001100 |
+|           96 |        17100 |     11168.50 |       0.0000 |      100.00% |     0.001100 |
+|           96 |        17150 |     11199.92 |       0.0000 |      100.00% |     0.001100 |
+|           97 |        17200 |     11232.63 |       0.0000 |      100.00% |     0.001100 |
+|           97 |        17250 |     11264.76 |       0.0001 |      100.00% |     0.001100 |
+|           97 |        17300 |     11297.98 |       0.0000 |      100.00% |     0.001100 |
+|           97 |        17350 |     11330.64 |       0.0001 |      100.00% |     0.001100 |
+|           98 |        17400 |     11363.23 |       0.0000 |      100.00% |     0.001100 |
+|           98 |        17450 |     11394.66 |       0.0000 |      100.00% |     0.001100 |
+|           98 |        17500 |     11426.42 |       0.0000 |      100.00% |     0.001100 |
+|           99 |        17550 |     11458.34 |       0.0000 |      100.00% |     0.001100 |
+|           99 |        17600 |     11490.89 |       0.0000 |      100.00% |     0.001100 |
+|           99 |        17650 |     11523.36 |       0.0000 |      100.00% |     0.001100 |
+|           99 |        17700 |     11555.45 |       0.0000 |      100.00% |     0.001100 |
+|          100 |        17750 |     11587.36 |       0.0000 |      100.00% |     0.001100 |
+|          100 |        17800 |     11618.94 |       0.0000 |      100.00% |     0.001100 |
+|          100 |        17850 |     11651.06 |       0.0000 |      100.00% |     0.001100 |
+|          100 |        17900 |     11682.75 |       0.0001 |      100.00% |     0.001100 |
+|=========================================================================================|
+
+ans = 
+
+  24x1 Layer array with layers:
+
+     1   'input'                 Image Input                   227x227x3 images with 'zerocenter' normalization and 'randfliplr' augmentations
+     2   'conv1'                 Convolution                   96 11x11x3 convolutions with stride [4  4] and padding [0  0]
+     3   'relu1'                 ReLU                          ReLU
+     4   'norm1'                 Cross Channel Normalization   cross channel normalization with 5 channels per element
+     5   'pool1'                 Max Pooling                   3x3 max pooling with stride [2  2] and padding [0  0]
+     6   'conv2'                 Convolution                   256 5x5x48 convolutions with stride [1  1] and padding [2  2]
+     7   'relu2'                 ReLU                          ReLU
+     8   'norm2'                 Cross Channel Normalization   cross channel normalization with 5 channels per element
+     9   'pool2'                 Max Pooling                   3x3 max pooling with stride [2  2] and padding [0  0]
+    10   'conv3'                 Convolution                   384 3x3x256 convolutions with stride [1  1] and padding [1  1]
+    11   'relu3'                 ReLU                          ReLU
+    12   'conv4'                 Convolution                   384 3x3x192 convolutions with stride [1  1] and padding [1  1]
+    13   'relu4'                 ReLU                          ReLU
+    14   'conv5'                 Convolution                   256 3x3x192 convolutions with stride [1  1] and padding [1  1]
+    15   'relu5'                 ReLU                          ReLU
+    16   'pool5'                 Max Pooling                   3x3 max pooling with stride [2  2] and padding [0  0]
+    17   'fc6'                   Fully Connected               4096 fully connected layer
+    18   'relu6'                 ReLU                          ReLU
+    19   'fc7'                   Fully Connected               4096 fully connected layer
+    20   'relu7'                 ReLU                          ReLU
+    21   'dropout'               Dropout                       50% dropout
+    22   'tfc8'                  Fully Connected               6 fully connected layer
+    23   'prob'                  Softmax                       softmax
+    24   'classificationLayer'   Classification Output         cross-entropy with 'Bees', 'Beetles', and 4 other classes
+
+ans =
+
+     6
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+
+%% based on Image Category Classification Using Deep Learning example we developed our Pollinator Recognition Model.
+% most of the example comments were left as it is.
+% 
+
+%Clear Memory & Command Window
+clc;
+clear all;
+close all;
+
+
+%% Check System Requirements
+% the system running A CUDA-capable NVIDIA(TM) GPU with compute capability 3.7
+
+% Get GPU device information
+deviceInfo = gpuDevice;
+
+%Reset the GPU this step performed to free some spaces on the GPU;
+%it was used when an error message appeared 'not enough memory.'
+gpuDevice(1);
+
+% Check the GPU compute capability
+computeCapability = str2double(deviceInfo.ComputeCapability);
+assert(computeCapability > 3.0, ...
+    'This example requires a GPU device with compute capability 3.0 or higher.')
+
+ %% upload Image Data
+% Store the output in a temporary folder
+outputFolder = fullfile({'/home/saldossa/Documents/MATLAB/PollinatorsRecognitionModel'});
+ 
+
+%% Load Images
+% use six categories: 'Bees', 'Flies','Beetles''Moths', 'Wasps','Butterflies'
+%The image category classifier will be trained to distinguish amongst
+%these categories.
+
+rootFolder = fullfile(outputFolder, {'coarse-grained-227'});
+categories = {'Bees','Butterflies','Beetles','Flies','Moths','Wasps'};
+
+%%
+% Create an |ImageDatastore| in ImageDatastore images are not loaded
+% into memory until read, making it efficient for use with large image
+% collections.
+imds = imageDatastore(fullfile(rootFolder, categories),'IncludeSubfolders',true,...
+    'LabelSource', 'foldernames'); %
+
+
+%%
+% The image datastore |imds| variable now contains the images and the category labels
+% associated with each image. The labels are automatically assigned from
+% the folder names of the image files. 
+%we use |countEachLabel| to summarize
+% the number of images per category.
+tbl = countEachLabel(imds)
+
+%%
+%The image datastore |imds| above contains an Unequal number of images per category,
+% We adjust it, so that the number of images in the training set
+% is balanced.
+
+minSetCount = min(tbl{:,2}); % determine the smallest amount of images in a category
+
+% we use splitEachLabel method to trim the image dataset with random images.
+imds = splitEachLabel(imds, minSetCount, 'randomize');
+
+% Notice that each set now has exactly the same number of images.
+countEachLabel(imds)
+
+
+%% upload Pre-trained Convolutional Neural Network (CNN)
+% Location of pre-trained "AlexNet" the CNN was downloaded from its
+% website http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz
+% Store CNN model in a temporary folder  bvlc_alexnet.caffemodel   imagenet-caffe-alex.mat 
+cnnMatFile = fullfile('/home/saldossa/Documents/MATLAB/PollinatorsRecognitionModel/imagenet-caffe-alex.mat');
+
+
+% Load Pre-trained CNN
+% Load MatConvNet network into a SeriesNetwork
+convnet = helperImportMatConvNet(cnnMatFile);
+
+% display AlexNet Layers
+convnet.Layers
+
+
+%% fine-tune the last three layers for the new classification problem 
+
+layersTransfer = convnet.Layers(1:end-3);
+
+%% modify the input layer we added the 'DataAugmentation' and set it to'randfliplr 
+
+layersTransfer(1) = imageInputLayer([227 227 3],'Name','input','DataAugmentation','randfliplr',...
+    'Normalization', 'zerocenter');
+
+
+%% Add dropout layer this layer is added to manage the overfitting of the algorithm
+% this step was adopted from the second version of AlexNet CNN
+layersTransfer(end+1) = dropoutLayer();
+
+
+%% the fully connected layer to classify the six classes 
+%the  'WeightLearnRateFactor' were modified several times we used 10, 20,
+%with BiasLearnRateFactor 20,40 respectively both preduced the same results
+% then we trained smaller number 
+
+
+
+layersTransfer(end+1) = fullyConnectedLayer(6,...
+    'WeightLearnRateFactor',2,...
+    'BiasLearnRateFactor', 20,...
+    'WeightL2Factor',1, ...
+    'BiasL2Factor', 0, ...
+    'Name','tfc8');
+
+
+    
+    
+
+%% adding a softmax layer and classification output layer
+
+layersTransfer(end+1) = softmaxLayer('Name', 'prob');
+layersTransfer(end+1) = classificationLayer('Name','classificationLayer');
+
+
+%% create the options of the transfer learning
+% modify the 'MaxEpochs' from 5 to 10 did not add more to the results however 
+% with 70 to 100 epochs and intial learn rate 0.0011 the accuracy improved
+% a little. We traied the intial learn rate 0.0001 and 0.000005 and performed best with
+% weightLEarnRateFactor of 10  than with 2
+
+
+optionsTransfer = trainingOptions('sgdm', ...
+    'MiniBatchSize',32,...
+    'MaxEpochs',100, ...
+    'InitialLearnRate' , 0.0011,...
+    'Verbose',true)
+
+    
+%% Pre-process Images For CNN
+% setup the |imds| read function, |imds.ReadFcn|, to pre-process
+% images to 227-by-227. and perform image translation.
+%The |imds.ReadFcn| is called every time an image is read from the |ImageDatastore|.
+% see the end
+
+% Set the ImageDatastore ReadFcn
+imds.ReadFcn = @(filename)readAndPreprocessImage(filename);
+
+
+%% Prepare Training and Test Image Sets
+% Split the sets into training and validation data. Pick 80% of images
+% from each set for the training data and the remainder, 20%, for the
+% validation data. Randomize the split to avoid biasing the results. The
+% training and test sets will be processed by the CNN model.
+
+
+[trainingSet, testSet] = splitEachLabel(imds, 0.8, 'randomize');
+
+
+%% Preform transfer learning. trainingFeatures, trainingLabels must have same number of observation
+
+[convnetTransfer,trainInfo] = trainNetwork(trainingSet,layersTransfer,optionsTransfer);
+
+
+% View the CNN architecture
+convnetTransfer.Layers
+
+
+% Number of class names for P.R Model classification task
+numel(convnetTransfer.Layers(end).ClassNames)
+
+
+%% save the trained network and this is the file  (pRModel.mat) that will be used in the GUI 
+save('pRModel.mat','convnetTransfer')
+save('testSet.mat','testSet')
+
+
+%%  This part shows the use of classification (classifiers) functions within the code
+% extract features from one of the deeper layers using the
+% |activations| method. miniBatchSize modfy from 32 (max is 256)
+% modify 'columns' to 'channels'|'rows'
+featureLayer = 20 ; % modified 'fc7' to relu7; 20
+trainingFeatures = activations(convnetTransfer, trainingSet, featureLayer, ...
+    'MiniBatchSize',32, 'OutputAs', 'columns');
+
+
+ %% Train A Multiclass SVM Classifier Using CNN Features
+% useing the CNN image features to train a multiclass SVM classifier.
+% Get training labels from the trainingSet
+trainingLabels = trainingSet.Labels;
+
+% Train multiclass SVM classifier using a fast linear solver, and set
+% 'ObservationsIn' to 'columns' to match the arrangement used for training
+% features. 'onevsall' 
+
+  classifier = fitcecoc(trainingFeatures, trainingLabels,...
+     'Learners', 'linear', 'Coding','allpairs', 'ObservationsIn','columns');
+
+
+%% Evaluate Classifier
+% extract image features from|testSet|. 
+%The test features can then be passed to the classifier to
+% measure the accuracy of the trained classifier.
+
+% Extract test features using the CNN
+testFeatures = activations(convnetTransfer, testSet, featureLayer,...
+    'MiniBatchSize',32);
+
+% Pass CNN image features to trained classifier
+predictedLabels = predict(classifier, testFeatures);
+
+% Get the known labels
+testLabels = testSet.Labels;
+
+% Tabulate the results using a confusion matrix.
+confMat = confusionmat(testLabels, predictedLabels);
+
+% Convert confusion matrix into percentage form
+confMat = bsxfun(@rdivide,confMat,sum(confMat,2))
+
+
+%% to save miss-predicted lebles
+% 
+idx = numel(testSet.Files)
+
+pathPositive = fullfile('/home/saldossa/Documents/MATLAB/PollinatorsRecognitionModel/Positive');
+pathNegative = fullfile('/home/saldossa/Documents/MATLAB/PollinatorsRecognitionModel/Negative');
+
+
+for i = 1: idx
+    
+   I = readimage(testSet,i);
+  
+if predictedLabels(i) == testLabels(i)
+ 
+    imwrite(I,fullfile(pathPositive,[ char(predictedLabels(i)),char(testLabels(i)) ,num2str(i),'.png'])); 
+    
+else
+    
+    imwrite(I,fullfile(pathNegative,[ char(predictedLabels(i)),char(testLabels(i)) ,num2str(i),'.png'])); 
+        
+end
+
+
+end
+
+
+%% both methods showed the same results
+
+% Display the mean accuracy
+meanAccuracy = mean(diag(confMat))
+
+% numel is the number of elements 
+accuracy = sum(predictedLabels == testLabels)/numel(predictedLabels)
+
+
+
+%% Try the Newly Trained Classifier on Test Images
+% You can now apply the newly trained classifier to categorize new images.
+newImage = imgetfile();
+
+%%
+% Pre-process the images as required for the CNN
+imgtest = readAndPreprocessImage(newImage);
+
+%%
+% Extract image features using the CNN
+imageFeatures = activations(convnetTransfer, imgtest, featureLayer);
+%%
+
+% Make a prediction using the classifier
+label = predict(classifier, imageFeatures)
+
+
+%% Display image with the predicted classfication
+
+figure
+imshow(imgtest)
+if accuracy <= 0.85
+    title(['\color{red}Predicted CLASS: ',char(label)])
+else
+    title(['\color{green}Predicted CLASS: ',char(label)])
+end  
+drawnow
+
+%% visualize the matrix using 
+
+tlabels = dummyvar(double(testLabels))';
+plabels = dummyvar(double(predictedLabels))';
+%plotconfusion(tlabels, plabels,'PR Model')
+
+
+pathCharts = fullfile('/home/saldossa/Documents/MATLAB/PollinatorsRecognitionModel/charts');
+
+figure
+saveas(plotconfusion(tlabels, plabels,'PR Model'),'PRModelConfMat.png')
+drawnow
+
+figure
+saveas(plotroc(tlabels,plabels),'PRModelROC.png')
+drawnow
+
+
+
+%% the pre-processing function
+
+% other CNN models have different input size constraints,
+% and may require other pre-processing steps.
+    function Iout = readAndPreprocessImage(filename)
+                
+        I = imread(filename);
+        
+        
+         % Some images may be grayscale. Replicate the image 3 times to
+         % create an RGB image. 
+         if ismatrix(I)
+             I = cat(3,I,I,I);
+         end
+         
+         
+         % translate image 25.3
+          I = imtranslate(I,[25.3, -10.1],'FillValues',255);
+         
+        
+        % Resize the image as required for the CNN. 
+        Iout = imresize(I, [227 227]);  
+     
+    end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
